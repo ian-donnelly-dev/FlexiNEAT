@@ -4,12 +4,19 @@
     {
         static void Main(string[] args)
         {
-            SumNode sumNode = new SumNode(1, ActivationFunctions.Sigmoid);
+            SumNode node0 = new SumNode(0, ActivationFunctions.Sigmoid);
+            SumNode node1 = new SumNode(1, ActivationFunctions.Sigmoid);
 
-            sumNode.AddInputValue(1.5);
-            sumNode.ComputeValue();
+            Synapse synapse0 = new Synapse(node0, node1, 2.0);
 
-            Console.WriteLine(sumNode.Value);
+            node0.AddInputValue(0);
+            node0.ComputeValue();
+
+            synapse0.OutputNode.AddInputValue(synapse0.InputNode.Value * synapse0.Weight);
+
+            node1.ComputeValue();
+
+            Console.WriteLine(node1.Value);
         }
     }
 }
