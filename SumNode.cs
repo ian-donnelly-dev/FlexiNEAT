@@ -2,7 +2,7 @@
 {
     public class SumNode : ProcessingNode
     {
-        public SumNode(ushort identifier, Func<double, double> activationFunc) : base(identifier, activationFunc) { }
+        public SumNode(Func<double, double> activationFunc) : base(activationFunc) { }
 
         protected override double EvaluateNode(List<double> inputs)
         {

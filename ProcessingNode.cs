@@ -3,11 +3,11 @@
     public abstract class ProcessingNode : BaseNode
     {
         protected List<double> inputValues;
-        protected Func<double, double> ActivationFunction;
+        protected Func<double, double> activationFunction;
 
-        protected ProcessingNode(ushort identifier, Func<double, double> activationFunc) : base(identifier)
+        protected ProcessingNode(Func<double, double> activationFunc)
         {
-            ActivationFunction = activationFunc;
+            activationFunction = activationFunc;
             inputValues = new List<double>();
         }
 
@@ -16,9 +16,9 @@
             inputValues.Add(inputValue);
         }
 
-        public override void ComputeValue()
+        protected override double ComputeValue()
         {
-            Value = ActivationFunction(EvaluateNode(inputValues));
+            return activationFunction(EvaluateNode(inputValues));
         }
 
         protected abstract double EvaluateNode(List<double> inputs);

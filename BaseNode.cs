@@ -2,14 +2,24 @@
 {
     public abstract class BaseNode
     {
-        public ushort Identifier { get; protected set; }
-        public double Value { get; protected set; }
+        private double value;
+        private bool computed;
 
-        protected BaseNode(ushort identifier)
+        protected BaseNode()
         {
-            Identifier = identifier;
+            computed = false;
         }
 
-        public abstract void ComputeValue();
+        protected abstract double ComputeValue();
+
+        public double GetValue()
+        {
+            if (!computed)
+            {
+                value = ComputeValue();
+                computed = true;
+            }
+            return value;
+        }
     }
 }
