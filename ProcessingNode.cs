@@ -5,7 +5,7 @@
         protected List<double> inputValues;
         protected Func<double, double> activationFunction;
 
-        protected ProcessingNode(Func<double, double> activationFunc)
+        protected ProcessingNode(byte depth, Func<double, double> activationFunc) : base(depth)
         {
             activationFunction = activationFunc;
             inputValues = new List<double>();
@@ -22,5 +22,11 @@
         }
 
         protected abstract double EvaluateNode(List<double> inputs);
+
+        public override void Reset()
+        {
+            base.Reset();
+            inputValues.Clear();
+        }
     }
 }

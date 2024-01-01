@@ -4,9 +4,11 @@
     {
         private double value;
         private bool computed;
+        public readonly byte depth;
 
-        protected BaseNode()
+        protected BaseNode(byte depth)
         {
+            this.depth = depth;
             computed = false;
         }
 
@@ -20,6 +22,11 @@
                 computed = true;
             }
             return value;
+        }
+
+        public virtual void Reset()
+        {
+            computed = false;
         }
     }
 }

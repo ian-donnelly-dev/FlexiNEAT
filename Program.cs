@@ -2,18 +2,20 @@
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            SumNode node0 = new SumNode(ActivationFunctions.Sigmoid);
-            SumNode node1 = new SumNode(ActivationFunctions.Sigmoid);
+            Genome genome = new Genome (
+                    new BaseNode[2] { 
+                        new DataInputNode(0),
+                        new DataInputNode(0) 
+                    },
+                    new SumNode[2] { 
+                        new SumNode(255, ActivationFunctions.Sigmoid),
+                        new SumNode(255, ActivationFunctions.Sigmoid)
+                    }
+                );
 
-            Synapse synapse0 = new Synapse(node0, node1, 2.0);
-
-            node0.AddInputValue(0);
-
-            synapse0.OutputNode.AddInputValue(synapse0.InputNode.GetValue() * synapse0.Weight);
-
-            Console.WriteLine(node1.GetValue());
+            // dedicated output node? remove depth passes here? (make a new input and output parent type that has set depth and other info) add synapse? split synapse?
         }
     }
 }
