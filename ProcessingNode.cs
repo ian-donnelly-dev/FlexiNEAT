@@ -2,31 +2,25 @@
 {
     public abstract class ProcessingNode : BaseNode
     {
-        protected List<double> inputValues;
+        protected List<Synapse> incomingSynapses;
         protected Func<double, double> activationFunction;
 
-        protected ProcessingNode(byte depth, Func<double, double> activationFunc) : base(depth)
+        protected ProcessingNode(Func<double, double> activationFunc = null, float? depth = null) : base(depth ?? 1.0f)
         {
-            activationFunction = activationFunc;
-            inputValues = new List<double>();
+            activationFunction = activationFunc ?? ActivationFunctions.LinearIdentity;
+            incomingSynapses = new List<Synapse>();
         }
 
-        public void AddInputValue(double inputValue)
+        public void AddSynapse(Synapse synapse)
         {
-            inputValues.Add(inputValue);
+            incomingSynapses.Add(synapse);
         }
 
         protected override double ComputeValue()
         {
-            return activationFunction(EvaluateNode(inputValues));
+            return activationFunction(AggregateInput(incomingSynapses));
         }
 
-        protected abstract double EvaluateNode(List<double> inputs);
-
-        public override void Reset()
-        {
-            base.Reset();
-            inputValues.Clear();
-        }
+        protected abstract double AggregateInput(List<Synapse> inputs);
     }
 }

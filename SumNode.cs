@@ -2,11 +2,11 @@
 {
     public class SumNode : ProcessingNode
     {
-        public SumNode(byte depth, Func<double, double> activationFunc) : base(depth, activationFunc) { }
+        public SumNode(Func<double, double> activationFunc = null, float? depth = null) : base(activationFunc, depth) { }
 
-        protected override double EvaluateNode(List<double> inputs)
+        protected override double AggregateInput(List<Synapse> inputs)
         {
-            return inputs.Sum();
+            return inputs.Sum(synapse => synapse.InputNode.GetValue() * synapse.Weight);
         }
     }
 }

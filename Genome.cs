@@ -2,27 +2,39 @@
 {
     public class Genome
     {
-        private InputNode[] inputNodes;
-        private OutputProcessingNode[] outputNodes;
+        public List<BaseNode> sortedNodes;
 
-        private List<HiddenProcessingNode> hiddenNodes;
-
-        private List<Synapse> synapses;
-
-        public Genome(InputNode[] inputNodes, OutputProcessingNode[] outputNodes)
+        public Genome(InputNode[] inputNodes, ProcessingNode[] outputNodes)
         {
-            this.inputNodes = inputNodes;
-            this.outputNodes = outputNodes;
+            sortedNodes = new List<BaseNode>();
 
-            hiddenNodes = new List<HiddenProcessingNode>();
-            synapses = new List<Synapse>();
+            foreach (InputNode inputNode in inputNodes)
+            {
+                if (inputNode.depth != 0)
+                {
+                    throw new ArgumentException("Input node must have a depth of 0.");
+                }
+
+                sortedNodes.Add(inputNode);
+            }
+
+            foreach (ProcessingNode outputNode in outputNodes)
+            {
+                if (outputNode.depth != 1)
+                {
+                    throw new ArgumentException("Output node must have a depth of 1.");
+                }
+
+                sortedNodes.Add(outputNode);
+            }
         }
 
         public void ResetNetwork()
         {
-            foreach (BaseNode node in inputNodes)  { node.Reset(); }
-            foreach (BaseNode node in outputNodes) { node.Reset(); }
-            foreach (BaseNode node in hiddenNodes) { node.Reset(); }
+            foreach (BaseNode node in sortedNodes)
+            {
+                node.Reset();
+            }
         }
     }
 }
