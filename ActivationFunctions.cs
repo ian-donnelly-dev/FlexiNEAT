@@ -14,4 +14,9 @@
     {
         return input > 0 ? input : 0.01 * input;
     }
+
+    public static double LinearIdentity(double input)
+    {
+        return input;
+    }
 }

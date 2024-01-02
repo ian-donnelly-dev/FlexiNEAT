@@ -4,9 +4,10 @@
     {
         private double value;
         private bool computed;
-        public readonly byte depth;
 
-        protected BaseNode(byte depth)
+        public readonly float depth;
+
+        protected BaseNode(float depth)
         {
             this.depth = depth;
             computed = false;

@@ -1,8 +1,8 @@
 ﻿namespace FlexiNEAT
 {
-    public class BiasNode : BaseNode
+    public class BiasNode : InputNode
     {
-        public BiasNode(byte depth) : base(depth) { }
+        public BiasNode() : base() { }
 
         protected override double ComputeValue()
         {
