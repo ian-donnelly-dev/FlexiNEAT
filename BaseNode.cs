@@ -5,9 +5,9 @@
         private double value;
         private bool computed;
 
-        public readonly float depth;
+        public readonly double depth;
 
-        protected BaseNode(float depth)
+        protected BaseNode(double depth)
         {
             this.depth = depth;
             computed = false;

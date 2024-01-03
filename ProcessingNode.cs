@@ -2,10 +2,10 @@
 {
     public abstract class ProcessingNode : BaseNode
     {
-        protected List<Synapse> incomingSynapses;
-        protected Func<double, double> activationFunction;
+        public List<Synapse> incomingSynapses { get; private set; }
+        public readonly Func<double, double> activationFunction;
 
-        protected ProcessingNode(Func<double, double> activationFunc = null, float? depth = null) : base(depth ?? 1.0f)
+        protected ProcessingNode(Func<double, double> activationFunc = null, double? depth = null) : base(depth ?? 1.0f)
         {
             activationFunction = activationFunc ?? ActivationFunctions.LinearIdentity;
             incomingSynapses = new List<Synapse>();

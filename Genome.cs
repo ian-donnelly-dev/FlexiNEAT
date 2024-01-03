@@ -1,12 +1,17 @@
-﻿namespace FlexiNEAT
+﻿using System.Text.Json;
+
+namespace FlexiNEAT
 {
     public class Genome
     {
-        public List<BaseNode> sortedNodes;
+        private List<BaseNode> sortedNodes;
+        private readonly int numSensorNodes;
+        private readonly int numOutputNodes;
 
         public Genome(InputNode[] inputNodes, ProcessingNode[] outputNodes)
         {
             sortedNodes = new List<BaseNode>();
+            numSensorNodes = 0;
 
             foreach (InputNode inputNode in inputNodes)
             {
@@ -16,6 +21,11 @@
                 }
 
                 sortedNodes.Add(inputNode);
+
+                if (inputNode is SensorNode)
+                {
+                    numSensorNodes++;
+                }
             }
 
             foreach (ProcessingNode outputNode in outputNodes)
@@ -29,12 +39,76 @@
             }
         }
 
+        public void SetInputs(double[] inputs)
+        {
+            if (inputs.Length != numSensorNodes)
+            {
+                throw new ArgumentException("The number of inputs must match the number of sensor nodes.");
+            }
+
+            int sensorIndex = 0;
+            foreach (BaseNode node in sortedNodes)
+            {
+                if (node is SensorNode)
+                {
+                    ((SensorNode)node).UpdateSensorValue(inputs[sensorIndex]);
+                    sensorIndex++;
+                    if (sensorIndex == numSensorNodes) break;
+                }
+            }
+        }
+
         public void ResetNetwork()
         {
             foreach (BaseNode node in sortedNodes)
             {
                 node.Reset();
             }
+        }
+
+        public double[] GetOutputs()
+        {
+            double[] outputs = new double[numOutputNodes];
+
+            for (int i = 0; i < numOutputNodes; i++)
+            {
+                outputs[i] = sortedNodes[sortedNodes.Count - numOutputNodes + i].GetValue();
+            }
+
+            ResetNetwork();
+
+            return outputs;
+        }
+
+        public string ExportState()
+        {
+            var nodeToIdMap = new Dictionary<BaseNode, int>();
+            var jsonNodes = new List<object>();
+            int idCounter = 1;
+
+            foreach (var node in sortedNodes)
+            {
+                nodeToIdMap[node] = idCounter++;
+            }
+
+            foreach (var node in sortedNodes)
+            {
+                var nodeData = new Dictionary<string, object>
+                {
+                    ["id"] = nodeToIdMap[node],
+                    ["type"] = node.GetType().Name,
+                    ["depth"] = node.depth
+                };
+
+                if (node is ProcessingNode processingNode && processingNode.incomingSynapses.Count > 0)
+                {
+                    nodeData["synapses"] = processingNode.incomingSynapses.Select(s => new { inputNodeId = nodeToIdMap[s.InputNode], weight = s.Weight });
+                }
+
+                jsonNodes.Add(nodeData);
+            }
+
+            return JsonSerializer.Serialize(new { sortedNodes = jsonNodes }, new JsonSerializerOptions { WriteIndented = true });
         }
     }
 }

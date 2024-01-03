@@ -9,13 +9,14 @@
                     new SensorNode(),
                     new SensorNode(),
                     new BiasNode(),
-                    new RandomNode(0.0, 1.0),
                 ],
                 [
                     new SumNode(ActivationFunctions.Sigmoid),
                     new SumNode(ActivationFunctions.Sigmoid)
                 ]
             );
+
+            Console.WriteLine(genome.ExportState());
         }
     }
 }

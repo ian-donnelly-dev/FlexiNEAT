@@ -2,14 +2,13 @@
 {
     public class Synapse
     {
-        public BaseNode InputNode { get; private set; }
-        public ProcessingNode OutputNode { get; private set; }
+        public readonly BaseNode InputNode;
         public double Weight { get; private set; }
 
-        public Synapse(BaseNode inputNode, ProcessingNode outputNode)
+        public Synapse(BaseNode inputNode)
         {
             InputNode = inputNode;
-            OutputNode = outputNode;
+            Weight = 1.0;
         }
 
         public void SetWeight(double weight)
