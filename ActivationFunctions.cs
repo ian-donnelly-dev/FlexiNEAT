@@ -19,4 +19,28 @@
     {
         return input;
     }
+
+    private static readonly Dictionary<string, Func<double, double>> FunctionMap = new Dictionary<string, Func<double, double>>
+    {
+        { "Sigmoid", Sigmoid },
+        { "HyperbolicTangent", HyperbolicTangent },
+        { "LeakyRectifiedLinearUnit", LeakyRectifiedLinearUnit },
+        { "LinearIdentity", LinearIdentity }
+    };
+
+    public static string GetFunctionName(Func<double, double> function)
+    {
+        var result = FunctionMap.FirstOrDefault(pair => pair.Value == function);
+        return result.Key ?? "Unknown";
+    }
+
+    public static Func<double, double> GetFunctionByName(string name)
+    {
+        if (FunctionMap.TryGetValue(name, out var function))
+        {
+            return function;
+        }
+
+        throw new ArgumentException($"No activation function found with name: {name}");
+    }
 }

@@ -2,8 +2,8 @@
 {
     public class RandomNode : InputNode
     {
-        private readonly double min;
-        private readonly double max;
+        public readonly double min;
+        public readonly double max;
 
         public RandomNode(double min, double max) : base()
         {

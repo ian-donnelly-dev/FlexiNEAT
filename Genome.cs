@@ -4,7 +4,7 @@ namespace FlexiNEAT
 {
     public class Genome
     {
-        private List<BaseNode> sortedNodes;
+        public List<BaseNode> sortedNodes; // revert to private after further testing
         private readonly int numSensorNodes;
         private readonly int numOutputNodes;
 
@@ -37,6 +37,11 @@ namespace FlexiNEAT
 
                 sortedNodes.Add(outputNode);
             }
+        }
+
+        public Genome(string jsonState)
+        {
+            InitializeFromJson(jsonState); // todo
         }
 
         public void SetInputs(double[] inputs)
@@ -100,9 +105,19 @@ namespace FlexiNEAT
                     ["depth"] = node.depth
                 };
 
-                if (node is ProcessingNode processingNode && processingNode.incomingSynapses.Count > 0)
+                if (node is ProcessingNode processingNode)
                 {
-                    nodeData["synapses"] = processingNode.incomingSynapses.Select(s => new { inputNodeId = nodeToIdMap[s.InputNode], weight = s.Weight });
+                    nodeData["activationFunction"] = ActivationFunctions.GetFunctionName(processingNode.activationFunction);
+
+                    if (processingNode.incomingSynapses.Count > 0)
+                    {
+                        nodeData["synapses"] = processingNode.incomingSynapses.Select(s => new { inputNodeId = nodeToIdMap[s.InputNode], weight = s.Weight });
+                    }
+                }
+                else if (node is RandomNode randomNode)
+                {
+                    nodeData["min"] = randomNode.min;
+                    nodeData["max"] = randomNode.max;
                 }
 
                 jsonNodes.Add(nodeData);
